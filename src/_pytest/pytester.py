@@ -1245,7 +1245,13 @@ class Testdir:
         return popen
 
     def run(
-        self, *cmdargs, timeout: Optional[float] = None, stdin=CLOSE_STDIN
+        self,
+        *cmdargs,
+        timeout: Optional[float] = None,
+        stdin=CLOSE_STDIN,
+        encoding: str = "utf-8",
+        errors: str = "strict",
+        env=None
     ) -> RunResult:
         """Run a command with arguments.
 
@@ -1261,6 +1267,13 @@ class Testdir:
             the pipe, otherwise it is passed through to ``popen``.
             Defaults to ``CLOSE_STDIN``, which translates to using a pipe
             (``subprocess.PIPE``) that gets closed.
+        :param encoding:
+            The encoding used to decode the stdout and stderr of the process.
+        :param errors:
+            The error handler to use when decoding the stdout and stderr of the process.
+        :param env:
+            The enviornment variables for the process.
+            The default is to inherit the environment of the current process.
         """
         __tracebackhide__ = True
 
@@ -1301,8 +1314,8 @@ class Testdir:
 
             duration = timing.perf_counter() - start
 
-        stdout_text = open(stdout_path, encoding="utf8")
-        stderr_text = open(stderr_path, encoding="utf8")
+        stdout_text = open(stdout_path, encoding=encoding, errors=errors)
+        stderr_text = open(stderr_path, encoding=encoding, errors=errors)
         with stdout_text, stderr_text:
             out = stdout_text.read().splitlines()
             err = stderr_text.read().splitlines()
