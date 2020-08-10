@@ -1297,6 +1297,7 @@ class Testdir:
                 stdout=stdout,
                 stderr=stderr,
                 close_fds=(sys.platform != "win32"),
+                env=env,
             )
             if isinstance(stdin, bytes):
                 popen.stdin.close()
